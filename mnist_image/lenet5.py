@@ -10,7 +10,7 @@ BATCH_SIZE = 300
 LEARNING_RATE_BASE = 0.8
 LEARNING_RATE_DECAY = 0.99
 REGULARIZATION_RATE = 0.0001
-TRAINING_STEPS = 30000
+TRAINING_STEPS = 1000
 MOVING_AVERAGE_DECAY = 0.99
 MODEL_SAVE_PATH="MNIST_model/"
 MODEL_NAME="mnist_model"
@@ -80,7 +80,7 @@ def train(image_batch, label_batch):
     cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y, labels=tf.argmax(y_, 1))
     cross_entropy_mean = tf.reduce_mean(cross_entropy)
     loss = cross_entropy_mean #+ tf.add_n(tf.get_collection('losses'))
-    train_step = tf.train.AdadeltaOptimizer(0.5).minimize(loss)
+    train_step = tf.train.AdadeltaOptimizer(0.1).minimize(loss)
 
 
     saver = tf.train.Saver()

@@ -15,7 +15,7 @@ cols = 28
 images_to_extract = 8000
 
 # 当前路径下的保存目录
-save_dir = "./mnist_digits_images"
+save_dir = "./images/all/"
 
 # 读入mnist数据
 mnist = input_data.read_data_sets("../mnist/MNIST_data/", one_hot=False)

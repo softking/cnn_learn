@@ -4,7 +4,7 @@
 import os
 import tensorflow as tf
 
-cwd = 'mnist_digits_images/'
+cwd = 'images/all/'
 classes = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 writer = tf.python_io.TFRecordWriter("mnist_record/number.tfrecords")  # 要生成的文件
 
