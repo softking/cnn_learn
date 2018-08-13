@@ -71,11 +71,6 @@ def inference(input_tensor, train, regularizer=None):
     return logit
 
 
-
-
-
-
-
 def train(mnist):
 
     x = tf.placeholder(tf.float32, [None, 28*28], name='x-input')
