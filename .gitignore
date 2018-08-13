@@ -5,3 +5,4 @@
 *.pyc
 *mnist_digits_images*
 *mnist_record*
+*.jpg
