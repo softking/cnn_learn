@@ -30,8 +30,6 @@ CONV2_SIZE = 5
 FC_SIZE = 512
 
 
-
-
 def inference(input_tensor, train, regularizer=None):
 
     with tf.variable_scope('layer1-conv1'):
@@ -73,7 +71,7 @@ def inference(input_tensor, train, regularizer=None):
     return logit
 
 
-cwd = 'images/check/'
+cwd = 'images/classifier/'
 
 def check():
 

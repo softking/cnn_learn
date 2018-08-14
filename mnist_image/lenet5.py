@@ -75,7 +75,7 @@ def train(image_batch, label_batch):
     x = tf.placeholder(tf.float32, [None, 28, 28, 1], name='x-input')
     y_ = tf.placeholder(tf.float32, [None, 10], name='y-input')
     regularizer = tf.contrib.layers.l2_regularizer(REGULARIZATION_RATE)
-    y = inference(x, True, regularizer=None)
+    y = inference(x, True, regularizer=regularizer)
 
     cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y, labels=tf.argmax(y_, 1))
     cross_entropy_mean = tf.reduce_mean(cross_entropy)

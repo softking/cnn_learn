@@ -7,6 +7,8 @@ import cv2
 import face_conv as myconv
 import common
 
+IMGSIZE = 64
+
 def check_face(chkpoint):
     camera = cv2.VideoCapture(0)
     haar = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -31,7 +33,7 @@ def check_face(chkpoint):
                 faces = haar.detectMultiScale(gray_img, 1.3, 5)
                 for f_x, f_y, f_w, f_h in faces:
                     face = img[f_y:f_y+f_h, f_x:f_x+f_w]
-                    face = cv2.resize(face, (64, 64))
+                    face = cv2.resize(face, (IMGSIZE, IMGSIZE))
                     #could deal with face to train
                     test_x = np.array([face])
                     test_x = test_x.astype(np.float32) / 255.0

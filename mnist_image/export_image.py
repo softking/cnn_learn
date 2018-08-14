@@ -50,6 +50,7 @@ if (images_count == labels_count) and (shape.size == 1):
                 # if mnist.train.images[i][n] != 0:
                 #     mnist.train.images[i][n] = 255
                 mnist.train.images[i][n] *= 255.0
+                mnist.train.images[i][n] = 255.0 - mnist.train.images[i][n]
             # 由于数据集图片数量庞大，转换可能要花不少时间，有必要打印转换进度
             if ((i + 1) % 50) == 0:
                 print ("图像浮点数值扩展进度：已转换 %s 张，共需转换 %s 张" % (i + 1, images_to_extract))
