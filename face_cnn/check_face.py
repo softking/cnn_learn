@@ -7,7 +7,7 @@ import cv2
 import face_conv as myconv
 import common
 
-IMGSIZE = 64
+IMGSIZE = 512
 
 def check_face(chkpoint):
     camera = cv2.VideoCapture(0)

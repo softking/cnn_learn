@@ -6,7 +6,8 @@ import logging as log
 import numpy as np
 import tensorflow as tf
 
-SIZE = 64
+SIZE = 512
+FULL_LAYER = 512
 
 x_data = tf.placeholder(tf.float32, [None, SIZE, SIZE, 3])
 y_data = tf.placeholder(tf.float32, [None, None])
@@ -54,15 +55,18 @@ def cnnLayer(classnum):
     pool3 = maxPool(conv3)
     drop3 = dropout(pool3, keep_prob_5) # 64 * 8 * 8
 
+    pool_shape = pool3.get_shape().as_list()     # 计算全连接层空间大小
+    nodes = pool_shape[1] * pool_shape[2] * pool_shape[3]     # 计算全连接层空间大小
+
     # 全连接层
-    Wf = weightVariable([8*16*32, 512])
-    bf = biasVariable([512])
-    drop3_flat = tf.reshape(drop3, [-1, 8*16*32])
+    Wf = weightVariable([nodes, FULL_LAYER])
+    bf = biasVariable([FULL_LAYER])
+    drop3_flat = tf.reshape(drop3, [-1, nodes])
     dense = tf.nn.relu(tf.matmul(drop3_flat, Wf) + bf)
     dropf = dropout(dense, keep_prob_75)
 
     # 输出层
-    Wout = weightVariable([512, classnum])
+    Wout = weightVariable([FULL_LAYER, classnum])
     bout = weightVariable([classnum])
     #out = tf.matmul(dropf, Wout) + bout
     out = tf.add(tf.matmul(dropf, Wout), bout)
@@ -71,7 +75,7 @@ def cnnLayer(classnum):
 def train(train_x, train_y, model_path):
     log.debug('train')
     out = cnnLayer(train_y.shape[1])
-    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=out, labels=y_data))
+    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=out, labels=y_data))
     train_step = tf.train.AdamOptimizer(0.01).minimize(cross_entropy)
     accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(out, 1), tf.argmax(y_data, 1)), tf.float32))
 
