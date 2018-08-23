@@ -4,7 +4,6 @@
 import tensorflow as tf
 import os
 import shutil
-import numpy_test as np
 
 BATCH_SIZE = 300
 LEARNING_RATE_BASE = 0.8

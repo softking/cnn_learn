@@ -6,7 +6,7 @@ import logging as log
 import numpy as np
 import tensorflow as tf
 
-SIZE = 512
+SIZE = 64
 FULL_LAYER = 512
 
 x_data = tf.placeholder(tf.float32, [None, SIZE, SIZE, 3])
@@ -86,9 +86,9 @@ def train(train_x, train_y, model_path):
         if os.path.exists(model_path + '.meta'):
             saver.restore(sess, model_path)
 
-        batch_size = 20
-        num_batch = len(train_x) // 20
-        for n in range(20):
+        batch_size = 10
+        num_batch = len(train_x) // 10
+        for n in range(10):
             r = np.random.permutation(len(train_x))
             train_x = train_x[r, :]
             train_y = train_y[r, :]

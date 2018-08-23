@@ -116,6 +116,8 @@ def run_epoch(session, model, data_queue, train_op, output_log, epoch_size):
     iters = 0
     state = session.run(model.initial_state)
 
+    saver = tf.train.Saver()
+
     # 使用当前数据训练或测试模型
     for step in range(epoch_size):
         # 生成输入和答案
@@ -140,6 +142,7 @@ def run_epoch(session, model, data_queue, train_op, output_log, epoch_size):
         if output_log and step % 100 == 0:
             print('After %d steps,perplexity is %.3f' %
                   (step, np.exp(total_costs / iters)))
+            saver.save(session, "mnist_model/model")
 
     return np.exp(total_costs / iters)
 

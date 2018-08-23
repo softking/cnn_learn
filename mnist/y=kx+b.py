@@ -37,7 +37,7 @@ b = tf.Variable([0.1], dtype=tf.float32)
 y = tf.nn.relu(tf.matmul(x, w) + b)
 loss = tf.square(y - y_)
 
-step = tf.train.AdadeltaOptimizer(0.001).minimize(loss)
+step = tf.train.AdadeltaOptimizer(0.01).minimize(loss)
 
 saver = tf.train.Saver()
 

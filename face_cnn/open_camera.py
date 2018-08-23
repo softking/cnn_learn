@@ -6,7 +6,7 @@ import random
 import numpy as np
 import cv2
 
-IMGSIZE = 512
+IMGSIZE = 64
 
 
 def createdir(*args):
