@@ -80,6 +80,7 @@ class GameState:
             pipeMidPos = pipe['x'] + PIPE_WIDTH / 2
             if pipeMidPos <= playerMidPos < pipeMidPos + 4:
                 self.score += 1
+                print("score: ", self.score)
                 #SOUNDS['point'].play()
                 reward = 1
 
