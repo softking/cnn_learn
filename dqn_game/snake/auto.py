@@ -9,7 +9,7 @@ import time
 import math
 
 GAMMA = 0.9  # discount factor for target Q
-INITIAL_EPSILON = 0.01  # starting value of epsilon
+INITIAL_EPSILON = 0.02  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
 REPLAY_SIZE = 10000  # 经验回放缓存大小
 BATCH_SIZE = 200  # 小批量尺寸
@@ -185,39 +185,24 @@ def main():
     env = gym.make('Snake-v0')
     agent = DQN(env)
 
-    agent.copyWeightsToTarget()
+    # agent.copyWeightsToTarget()
+    state = env.reset()
+    state = np.reshape(state, [-1])
 
-    for step in range(EPISODE):
-        # initialize task
-        state = env.reset()
-        state = np.reshape(state, [-1])
 
-        # Train
-        done = False
+    while True:
 
-        reward_sum = 0
-        max_length = 0
-        while not done:
+        env.render()
 
-            env.render()
+        action = agent.action(state)
+        next_state, reward, done, length = env.step(action)
 
-            action = agent.egreedy_action(state)
-            next_state, reward, done, length = env.step(action)
-            next_state = np.reshape(next_state, [-1])
+        state = np.reshape(next_state, [-1])
+        time.sleep(0.1)
 
-            agent.perceive(state, action, reward, next_state, done)
-            state = next_state
-            reward_sum += reward
+        if done:
+            break
 
-            max_length = max(max_length, length)
-
-            if done:
-                env.reset()
-                break
-
-        print 'step: ', step, "   reward_num: ", reward_sum, "  max_length", max_length, "  epsilon:", agent.epsilon
-        if step % 100 == 0:
-            agent.save_models(step)
 
 
 if __name__ == '__main__':

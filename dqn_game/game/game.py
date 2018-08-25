@@ -73,13 +73,13 @@ while running:
     clock.tick(60)
 
     # 控制发射子弹频率,并发射子弹
-    if not player.is_hit:
-        if shoot_frequency % 15 == 0:
-            bullet_sound.play()
-            player.shoot(bullet_img)
-        shoot_frequency += 1
-        if shoot_frequency >= 15:
-            shoot_frequency = 0
+    # if not player.is_hit:
+    #     if shoot_frequency % 15 == 0:
+    #         bullet_sound.play()
+    #         player.shoot(bullet_img)
+    #     shoot_frequency += 1
+    #     if shoot_frequency >= 15:
+    #         shoot_frequency = 0
 
     # 生成敌机
     if enemy_frequency % 50 == 0:
@@ -172,6 +172,9 @@ while running:
             player.moveLeft()
         if key_pressed[K_d] or key_pressed[K_RIGHT]:
             player.moveRight()
+        if key_pressed[K_SPACE]:
+            bullet_sound.play()
+            player.shoot(bullet_img)
 
 font = pygame.font.Font(None, 48)
 text = font.render('Score: ' + str(score), True, (255, 0, 0))

@@ -107,7 +107,7 @@ class Snake(gym.Env):
         # 控制游戏速度
         # self.fpsClock.tick(5)
 
-        return self.build_data(), reward, done, None
+        return self.build_data(), reward, done, len(self.snakeSegments) - 3
 
     def reset(self):
         self.snakePosition = [100, 100]
@@ -119,12 +119,6 @@ class Snake(gym.Env):
 
 
     def render(self, mode='human', close=False):
-        if close:
-            if self.viewer is not None:
-                self.viewer.close()
-                self.viewer = None
-            return
-
         # 绘制pygame显示层
         self.playSurface.fill(blackColour)
         for position in self.snakeSegments:
