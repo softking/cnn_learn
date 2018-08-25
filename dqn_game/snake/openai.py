@@ -9,7 +9,7 @@ import time
 import math
 
 GAMMA = 0.9  # discount factor for target Q
-INITIAL_EPSILON = 0.1  # starting value of epsilon
+INITIAL_EPSILON = 0.3  # starting value of epsilon
 FINAL_EPSILON = 0.01  # final value of epsilon
 REPLAY_SIZE = 10000  # 经验回放缓存大小
 BATCH_SIZE = 200  # 小批量尺寸
@@ -24,7 +24,7 @@ class DQN():
         # init some parameters
         self.time_step = 0
         self.epsilon = INITIAL_EPSILON
-        self.state_dim = 600
+        self.state_dim = 200
         self.action_dim = 4
         self.hide_layer_inputs = 52
         # 创建Q网络
@@ -186,8 +186,6 @@ def main():
     agent = DQN(env)
 
     agent.copyWeightsToTarget()
-
-    Data = deque()
 
     for episode in range(EPISODE):
         # initialize task
