@@ -34,17 +34,17 @@ class Snake(gym.Env):
     def build_data(self):
         """
         """
-        # data = []
-        # data.append(self.snakePosition)
-        # data.append(self.raspberryPosition)
-        # data.append([self.direction, 0])
-        # data.extend(self.snakeSegments)
-        # for i in range(len(data), 300):
-        #     data.append([0, 0])
-        # return data
+        data = []
+        data.append(self.snakePosition)
+        data.append(self.raspberryPosition)
+        data.append([self.direction, 0])
+        data.extend(self.snakeSegments)
+        for i in range(len(data), 300):
+            data.append([0, 0])
+        return data
 
-        image_data = pygame.surfarray.array3d(pygame.display.get_surface())
-        return image_data
+        # image_data = pygame.surfarray.array3d(pygame.display.get_surface())
+        # return image_data
 
     def step(self, action):
         """
