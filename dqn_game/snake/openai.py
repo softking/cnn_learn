@@ -9,10 +9,10 @@ import time
 import math
 
 GAMMA = 0.9  # discount factor for target Q
-INITIAL_EPSILON = 0.01  # starting value of epsilon
+INITIAL_EPSILON = 0.1  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
 REPLAY_SIZE = 10000  # 经验回放缓存大小
-BATCH_SIZE = 200  # 小批量尺寸
+BATCH_SIZE = 600  # 小批量尺寸
 TARGET_Q_STEP = 100  # 目标网络同步的训练次数
 
 
@@ -143,7 +143,7 @@ class DQN():
             self.state_input: [state]
         })[0]
 
-        self.epsilon -= (INITIAL_EPSILON - FINAL_EPSILON) / 10000
+        self.epsilon = max(self.epsilon - 0.001 / 10000, FINAL_EPSILON) 
 
         if random.random() <= self.epsilon:
             return np.random.randint(0, 4)
