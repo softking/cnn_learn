@@ -279,4 +279,3 @@ class FiveChessEnv(gym.Env):
     # if self.state is None: return None
     # return super().render(mode)
 
-a = FiveChessEnv()
