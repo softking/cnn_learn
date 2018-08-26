@@ -38,9 +38,27 @@ class Plane(gym.Env):
         self.player_down_index = 16
         self.score = 0
 
+        return self.build_data()
+
+    def build_data(self):
+        """
+        """
+        data = []
+        data.append(self.player.rect.topleft)
+        for i in self.enemies:
+            data.append(i.rect.topleft)
+
+        for i in range(len(data), 10):
+            data.append([0,0])
+
+        return data
+
     def step(self, action):
         """
         """
+        done = False
+        reward = 0
+
         # 生成敌机
         while len(self.enemies) < 5:
             enemy_pos = [random.randint(0, SCREEN_WIDTH - enemy_rect.width), 0]
@@ -60,8 +78,8 @@ class Plane(gym.Env):
             # 判断玩家是否被击中
             if pygame.sprite.collide_circle(enemy, self.player):
                 self.enemies.remove(enemy)
-                self.player.is_hit = True
-                self.reset()
+                done = True
+                reward = -10
                 break
             if enemy.rect.top > SCREEN_HEIGHT:
                 self.enemies.remove(enemy)
@@ -69,6 +87,8 @@ class Plane(gym.Env):
         # 将被击中的敌机对象添加到击毁敌机Group中，用来渲染击毁动画
         enemies_down = pygame.sprite.groupcollide(self.enemies, self.player.bullets, 1, 1)
         self.score += len(enemies_down)
+
+        reward += (len(enemies_down)*5)
 
         pygame.event.get()
 
@@ -79,6 +99,8 @@ class Plane(gym.Env):
             3: self.player.moveRight,
             4: self.player.shoot
         }[action]()
+
+        return self.build_data(), reward, done
 
 
     def render(self, mode='human'):

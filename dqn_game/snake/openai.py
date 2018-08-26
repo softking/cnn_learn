@@ -186,8 +186,11 @@ def main():
     agent = DQN(env)
 
     agent.copyWeightsToTarget()
+    step = 0
 
-    for step in range(EPISODE):
+    while True:
+
+        step += 1
         # initialize task
         state = env.reset()
         state = np.reshape(state, [-1])

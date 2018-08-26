@@ -3,7 +3,7 @@
 import pygame
 
 SCREEN_WIDTH = 480
-SCREEN_HEIGHT = 800
+SCREEN_HEIGHT = 600
 
 TYPE_SMALL = 1
 TYPE_MIDDLE = 2
@@ -19,7 +19,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image = bullet_img
         self.rect = self.image.get_rect()
         self.rect.midbottom = init_pos
-        self.speed = 10
+        self.speed = 100
 
     def move(self):
         self.rect.top -= self.speed
@@ -31,8 +31,8 @@ class Player(pygame.sprite.Sprite):
 
         self.image = (plane_img.subsurface(pygame.Rect(0, 99, 102, 126)).convert_alpha())
         self.rect = pygame.Rect(0, 99, 102, 126)        # 初始化图片所在的矩形
-        self.rect.topleft = [200, 600]                  # 初始化矩形的左上角坐标
-        self.speed = 8                                  # 初始化玩家速度，这里是一个确定的值
+        self.rect.topleft = [200, 400]                  # 初始化矩形的左上角坐标
+        self.speed = 80                                  # 初始化玩家速度，这里是一个确定的值
         self.bullets = pygame.sprite.Group()            # 玩家飞机所发射的子弹的集合
         self.img_index = 0                              # 玩家精灵图片索引
         self.is_hit = False                             # 玩家是否被击中
@@ -74,7 +74,7 @@ class Enemy(pygame.sprite.Sprite):
        self.image = img
        self.rect = self.image.get_rect()
        self.rect.topleft = init_pos
-       self.speed = 2
+       self.speed = 20
        self.down_index = 0
 
     def move(self):
