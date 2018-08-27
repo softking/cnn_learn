@@ -79,16 +79,17 @@ class Plane(gym.Env):
             if pygame.sprite.collide_circle(enemy, self.player):
                 self.enemies.remove(enemy)
                 done = True
-                reward = -10
+                reward = -50
                 break
             if enemy.rect.top > SCREEN_HEIGHT:
                 self.enemies.remove(enemy)
+                reward += 2
 
         # 将被击中的敌机对象添加到击毁敌机Group中，用来渲染击毁动画
         enemies_down = pygame.sprite.groupcollide(self.enemies, self.player.bullets, 1, 1)
         self.score += len(enemies_down)
 
-        reward += (len(enemies_down)*5)
+        reward += (len(enemies_down)*10)
 
         pygame.event.get()
 
