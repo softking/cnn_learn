@@ -1,0 +1,6 @@
+model_checkpoint_path: "snake-2000"
+all_model_checkpoint_paths: "snake-1600"
+all_model_checkpoint_paths: "snake-1700"
+all_model_checkpoint_paths: "snake-1800"
+all_model_checkpoint_paths: "snake-1900"
+all_model_checkpoint_paths: "snake-2000"
