@@ -10,8 +10,8 @@ import math
 
 GAMMA = 0.9  # discount factor for target Q
 INITIAL_EPSILON = 0.0001  # starting value of epsilon
-FINAL_EPSILON = 0#0.001  # final value of epsilon
-REPLAY_SIZE = 10000  # 经验回放缓存大小
+FINAL_EPSILON = 0.001  # final value of epsilon
+REPLAY_SIZE = 2000  # 经验回放缓存大小
 BATCH_SIZE = 600  # 小批量尺寸
 TARGET_Q_STEP = 100  # 目标网络同步的训练次数
 
