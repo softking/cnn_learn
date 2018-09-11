@@ -143,7 +143,7 @@ class DQN():
             self.state_input: [state]
         })[0]
 
-        self.epsilon = max(self.epsilon - 0.001 / 5000, FINAL_EPSILON)
+        self.epsilon = max(self.epsilon - 0.001 / 2000, FINAL_EPSILON)
 
         if random.random() <= self.epsilon:
             return np.random.randint(0, 4)
