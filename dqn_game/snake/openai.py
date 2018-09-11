@@ -10,8 +10,8 @@ import math
 
 GAMMA = 0.9  # discount factor for target Q
 INITIAL_EPSILON = 0.01  # starting value of epsilon
-FINAL_EPSILON = 0.0001  # final value of epsilon
-REPLAY_SIZE = 10000  # 经验回放缓存大小
+FINAL_EPSILON = 0.001  # final value of epsilon
+REPLAY_SIZE = 2000  # 经验回放缓存大小
 BATCH_SIZE = 600  # 小批量尺寸
 TARGET_Q_STEP = 100  # 目标网络同步的训练次数
 
@@ -26,7 +26,7 @@ class DQN():
         self.epsilon = INITIAL_EPSILON
         self.state_dim = 200
         self.action_dim = 4
-        self.hide_layer_inputs = 52
+        self.hide_layer_inputs = 5000
         # 创建Q网络
         self.create_Q_network()
         # 创建训练方法

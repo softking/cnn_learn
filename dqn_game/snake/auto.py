@@ -26,7 +26,7 @@ class DQN():
         self.epsilon = INITIAL_EPSILON
         self.state_dim = 200
         self.action_dim = 4
-        self.hide_layer_inputs = 52
+        self.hide_layer_inputs = 5000
         # 创建Q网络
         self.create_Q_network()
         # 创建训练方法

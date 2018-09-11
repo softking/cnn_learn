@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import gym
-from gym import spaces
-from gym.utils import seeding
-import numpy as np
 
 import pygame,sys,time,random
 from pygame.locals import *
@@ -36,7 +33,6 @@ class Snake(gym.Env):
         """
         """
         data = []
-        data.append(self.snakePosition)
         data.append(self.raspberryPosition)
         data.append([self.direction, 0])
         data.extend(self.snakeSegments)
@@ -78,14 +74,14 @@ class Snake(gym.Env):
             self.snakeSegments.pop()
 
         self.step_num += 1
-        reward -= self.step_num * 0.02
+        reward -= self.step_num * 0.2
         # 如果吃掉树莓，则重新生成树莓
         if raspberrySpawned == 0:
-            x = random.randrange(5, 10)
-            y = random.randrange(5, 10)
+            x = random.randrange(7, 9)
+            y = random.randrange(7, 9)
             self.raspberryPosition = [int(x * 20), int(y * 20)]
 
-            reward += 10
+            reward += 1000
 
         # 判断是否死亡
         if self.snakePosition[0] > 300 or self.snakePosition[0] < 0:
