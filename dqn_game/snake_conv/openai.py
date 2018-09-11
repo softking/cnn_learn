@@ -9,9 +9,9 @@ import time
 import math
 
 GAMMA = 0.9  # discount factor for target Q
-INITIAL_EPSILON = 0.1  # starting value of epsilon
+INITIAL_EPSILON = 0.2  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
-REPLAY_SIZE = 2000  # 经验回放缓存大小
+REPLAY_SIZE = 10000  # 经验回放缓存大小
 BATCH_SIZE = 600  # 小批量尺寸
 
 
@@ -139,13 +139,30 @@ class DQN():
 
 
     def egreedy_action(self, state):
-        Q_value = self.Q_value.eval(feed_dict={
-            self.state_input: [state]
-        })[0]
+        Q_value = self.Q_value.eval(feed_dict={self.state_input: [state]})[0]
 
         self.epsilon = max(self.epsilon - 0.001 / 2000, FINAL_EPSILON)
 
         if random.random() <= self.epsilon:
+            head = [0, 0]
+            food = [0, 0]
+            for i in range(len(state)):
+                for j in range(len(state[i])):
+                    if state[i][j][0] == 1:
+                        head = [i, j]
+                    if state[i][j][0] == 4:
+                        food = [i, j]
+
+            if food[0] < head[0]:
+                return 1
+            if food[0] > head[0]:
+                return 0
+            if food[1] < head[1]:
+                return 2
+            if food[1] > head[1]:
+                return 3
+
+
             return np.random.randint(0, 4)
         else:
             return np.argmax(Q_value)
@@ -180,8 +197,8 @@ def main():
     step = 0
 
     while True:
-
         step += 1
+
         # initialize task
         state = env.reset()
 
