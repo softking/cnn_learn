@@ -13,7 +13,6 @@ INITIAL_EPSILON = 0.01  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
 REPLAY_SIZE = 2000  # 经验回放缓存大小
 BATCH_SIZE = 600  # 小批量尺寸
-TARGET_Q_STEP = 100  # 目标网络同步的训练次数
 
 
 class DQN():
@@ -31,9 +30,6 @@ class DQN():
         self.create_Q_network()
         # 创建训练方法
         self.create_training_method()
-
-        self.target_q_step = TARGET_Q_STEP
-        self.create_TargetQ_network()
 
         # 初始会话
         self.session = tf.InteractiveSession()
@@ -60,30 +56,10 @@ class DQN():
         b2 = self.bias_variable([self.action_dim])
         # input layer
         self.state_input = tf.placeholder("float", [None, self.state_dim])
-        # hidden layers
+
         h_layer = tf.nn.relu(tf.matmul(self.state_input, W1) + b1)
-        # Q Value layer
         self.Q_value = tf.matmul(h_layer, W2) + b2
-        # 保存权重
-        self.Q_Weihgts = [W1, b1, W2, b2]
 
-    def create_TargetQ_network(self):
-        # network weights
-        W1 = self.weight_variable([self.state_dim, self.hide_layer_inputs])
-        b1 = self.bias_variable([self.hide_layer_inputs])
-        W2 = self.weight_variable([self.hide_layer_inputs, self.action_dim])
-        b2 = self.bias_variable([self.action_dim])
-        # input layer
-        # self.state_input = tf.placeholder("float",[None,self.state_dim])
-        # hidden layers
-        h_layer = tf.nn.relu(tf.matmul(self.state_input, W1) + b1)
-        # Q Value layer
-        self.TargetQ_value = tf.matmul(h_layer, W2) + b2
-        self.TargetQ_Weights = [W1, b1, W2, b2]
-
-    def copyWeightsToTarget(self):
-        for i in range(len(self.Q_Weihgts)):
-            self.session.run(tf.assign(self.TargetQ_Weights[i], self.Q_Weihgts[i]))
 
     def create_training_method(self):
         self.action_input = tf.placeholder("float", [None, self.action_dim])  # one hot presentation
@@ -120,7 +96,7 @@ class DQN():
         # Step 2: calculate y
         y_batch = []
         Q_value_batch = self.Q_value.eval(feed_dict={self.state_input: next_state_batch})
-        # Q_value_batch = self.TargetQ_value.eval(feed_dict={self.state_input:next_state_batch})
+
         for i in range(0, BATCH_SIZE):
             done = minibatch[i][4]
             if done:
@@ -133,10 +109,6 @@ class DQN():
             self.action_input: action_batch,
             self.state_input: state_batch
         })
-
-        # 同步目标网络
-        if self.time_step % self.target_q_step == 0:
-            self.copyWeightsToTarget()
 
     def egreedy_action(self, state):
         Q_value = self.Q_value.eval(feed_dict={
@@ -167,11 +139,6 @@ class DQN():
 
 
 # ---------------------------------------------------------
-# Hyper Parameters
-EPISODE = 10000  # Episode limitation
-STEP = 300  # Step limitation in an episode
-TEST = 1  # The number of experiment test every 100 episode
-
 from gym.envs.registration import register
 
 register(
@@ -185,9 +152,7 @@ def main():
     env = gym.make('Snake-v0')
     agent = DQN(env)
 
-    agent.copyWeightsToTarget()
     step = 0
-
     while True:
 
         step += 1

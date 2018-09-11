@@ -38,9 +38,7 @@ class DQN():
         # init some parameters
         self.time_step = 0
         self.epsilon = INITIAL_EPSILON
-        self.state_dim = 192
         self.action_dim = 4
-        self.hide_layer_inputs = 1000
         # 创建Q网络
         self.create_Q_network()
         # 创建训练方法
@@ -96,7 +94,6 @@ class DQN():
         self.state_input = s
 
 
-
     def create_training_method(self):
         self.action_input = tf.placeholder("float", [None, self.action_dim])  # one hot presentation
         self.y_input = tf.placeholder("float", [None])
@@ -118,7 +115,6 @@ class DQN():
 
     def train_Q_network(self):
         self.time_step += 1
-        # Step 1: obtain random minibatch from replay memory
         minibatch = random.sample(self.replay_buffer, BATCH_SIZE)
         state_batch = [data[0] for data in minibatch]
         action_batch = [data[1] for data in minibatch]
@@ -151,14 +147,11 @@ class DQN():
 
         if random.random() <= self.epsilon:
             return np.random.randint(0, 4)
-        # return random.randint(0,self.action_dim - 1)
         else:
             return np.argmax(Q_value)
 
     def action(self, state):
-        Q_value = self.Q_value.eval(feed_dict={
-            self.state_input: [state]
-        })[0]
+        Q_value = self.Q_value.eval(feed_dict={self.state_input: [state]})[0]
         return np.argmax(Q_value)
 
     def weight_variable(self, shape):
