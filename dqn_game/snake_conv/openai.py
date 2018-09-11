@@ -141,7 +141,7 @@ class DQN():
     def egreedy_action(self, state):
         Q_value = self.Q_value.eval(feed_dict={self.state_input: [state]})[0]
 
-        self.epsilon = max(self.epsilon - 0.001 / 2000, FINAL_EPSILON)
+        self.epsilon = max(self.epsilon - 0.001 / 5000, FINAL_EPSILON)
 
         if random.random() <= self.epsilon:
             head = [0, 0]
