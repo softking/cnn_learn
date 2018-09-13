@@ -76,7 +76,7 @@ class Snake(gym.Env):
             self.snakeSegments.pop()
 
         self.step_num += 1
-        # reward -= self.step_num * 0.2
+        reward -= self.step_num * 0.2
         # 如果吃掉树莓，则重新生成树莓
         if raspberrySpawned == 0:
             x = random.randrange(7, 9)

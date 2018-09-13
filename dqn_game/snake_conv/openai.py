@@ -9,7 +9,7 @@ import time
 import math
 
 GAMMA = 0.9  # discount factor for target Q
-INITIAL_EPSILON = 0.1  # starting value of epsilon
+INITIAL_EPSILON = 0.2  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
 REPLAY_SIZE = 10000  # 经验回放缓存大小
 BATCH_SIZE = 600  # 小批量尺寸
@@ -69,10 +69,10 @@ class DQN():
         W_conv2 = weight_variable([4, 4, 32, 64])
         b_conv2 = bias_variable([64])
 
-        W_conv3 = weight_variable([3, 3, 64, 64])
-        b_conv3 = bias_variable([64])
+        W_conv3 = weight_variable([3, 3, 64, 128])
+        b_conv3 = bias_variable([128])
 
-        W_fc1 = weight_variable([768, 1024])
+        W_fc1 = weight_variable([1536, 1024])
         b_fc1 = bias_variable([1024])
 
         W_fc2 = weight_variable([1024, 4])
@@ -86,7 +86,7 @@ class DQN():
         h_conv2 = tf.nn.relu(conv2d(h_conv1, W_conv2, 2) + b_conv2)
         h_conv3 = tf.nn.relu(conv2d(h_conv2, W_conv3, 1) + b_conv3)
 
-        h_conv3_flat = tf.reshape(h_conv3, [-1, 768])
+        h_conv3_flat = tf.reshape(h_conv3, [-1, 1536])
 
         h_fc1 = tf.nn.relu(tf.matmul(h_conv3_flat, W_fc1) + b_fc1)
 
@@ -144,24 +144,24 @@ class DQN():
         self.epsilon = max(self.epsilon - 0.001 / 5000, FINAL_EPSILON)
 
         if random.random() <= self.epsilon:
-            head = [0, 0]
-            food = [0, 0]
-            for i in range(len(state)):
-                for j in range(len(state[i])):
-                    if state[i][j][0] == 1:
-                        head = [i, j]
-                    if state[i][j][0] == 4:
-                        food = [i, j]
-
-
-            if food[0] < head[0]:
-                return 1
-            if food[0] > head[0]:
-                return 0
-            if food[1] < head[1]:
-                return 2
-            if food[1] > head[1]:
-                return 3
+        #     head = [0, 0]
+        #     food = [0, 0]
+        #     for i in range(len(state)):
+        #         for j in range(len(state[i])):
+        #             if state[i][j][0] == 1:
+        #                 head = [i, j]
+        #             if state[i][j][0] == 4:
+        #                 food = [i, j]
+        #
+        #
+        #     if food[0] < head[0]:
+        #         return 1
+        #     if food[0] > head[0]:
+        #         return 0
+        #     if food[1] < head[1]:
+        #         return 2
+        #     if food[1] > head[1]:
+        #         return 3
 
 
             return np.random.randint(0, 4)
