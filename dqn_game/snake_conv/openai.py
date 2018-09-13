@@ -141,27 +141,27 @@ class DQN():
     def egreedy_action(self, state):
         Q_value = self.Q_value.eval(feed_dict={self.state_input: [state]})[0]
 
-        self.epsilon = max(self.epsilon - 0.001 / 5000, FINAL_EPSILON)
+        self.epsilon = max(self.epsilon - 0.001 / 1000, FINAL_EPSILON)
 
         if random.random() <= self.epsilon:
-        #     head = [0, 0]
-        #     food = [0, 0]
-        #     for i in range(len(state)):
-        #         for j in range(len(state[i])):
-        #             if state[i][j][0] == 1:
-        #                 head = [i, j]
-        #             if state[i][j][0] == 4:
-        #                 food = [i, j]
-        #
-        #
-        #     if food[0] < head[0]:
-        #         return 1
-        #     if food[0] > head[0]:
-        #         return 0
-        #     if food[1] < head[1]:
-        #         return 2
-        #     if food[1] > head[1]:
-        #         return 3
+            head = [0, 0]
+            food = [0, 0]
+            for i in range(len(state)):
+                for j in range(len(state[i])):
+                    if state[i][j][0] == 1:
+                        head = [i, j]
+                    if state[i][j][0] == 4:
+                        food = [i, j]
+
+
+            if food[0] < head[0]:
+                return 1
+            if food[0] > head[0]:
+                return 0
+            if food[1] < head[1]:
+                return 2
+            if food[1] > head[1]:
+                return 3
 
 
             return np.random.randint(0, 4)
