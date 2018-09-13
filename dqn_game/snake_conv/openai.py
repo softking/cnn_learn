@@ -9,7 +9,7 @@ import time
 import math
 
 GAMMA = 0.9  # discount factor for target Q
-INITIAL_EPSILON = 0.2  # starting value of epsilon
+INITIAL_EPSILON = 0.1  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
 REPLAY_SIZE = 10000  # 经验回放缓存大小
 BATCH_SIZE = 600  # 小批量尺寸
@@ -72,10 +72,10 @@ class DQN():
         W_conv3 = weight_variable([3, 3, 64, 64])
         b_conv3 = bias_variable([64])
 
-        W_fc1 = weight_variable([768, 512])
-        b_fc1 = bias_variable([512])
+        W_fc1 = weight_variable([768, 1024])
+        b_fc1 = bias_variable([1024])
 
-        W_fc2 = weight_variable([512, 4])
+        W_fc2 = weight_variable([1024, 4])
         b_fc2 = bias_variable([4])
 
         # input layer
@@ -152,6 +152,7 @@ class DQN():
                         head = [i, j]
                     if state[i][j][0] == 4:
                         food = [i, j]
+
 
             if food[0] < head[0]:
                 return 1

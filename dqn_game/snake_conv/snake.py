@@ -38,7 +38,7 @@ class Snake(gym.Env):
         data = np.full((16, 12, 1), 0)
         data[self.snakePosition[0]/20-1][self.snakePosition[1]/20-1][0] += 1     # 头
         data[self.raspberryPosition[0] / 20 - 1][self.raspberryPosition[1] / 20 - 1][0] += 4  # 草莓
-        for i in self.snakeSegments:
+        for i in self.snakeSegments[1:]:
             data[i[0] / 20 - 1][i[1] / 20 - 1][0] += 2  # 身子
         return data
 
@@ -76,7 +76,7 @@ class Snake(gym.Env):
             self.snakeSegments.pop()
 
         self.step_num += 1
-        reward -= self.step_num * 0.2
+        # reward -= self.step_num * 0.2
         # 如果吃掉树莓，则重新生成树莓
         if raspberrySpawned == 0:
             x = random.randrange(7, 9)
