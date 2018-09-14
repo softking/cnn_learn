@@ -185,24 +185,29 @@ def main():
     env = gym.make('Snake-v0')
     agent = DQN(env)
 
-    # agent.copyWeightsToTarget()
-    state = env.reset()
-    state = np.reshape(state, [-1])
-
-
     while True:
+            
+        # agent.copyWeightsToTarget()
+        state = env.reset()
+        state = np.reshape(state, [-1])
 
-        env.render()
+        max_length = 0
+        while True:
 
-        action = agent.action(state)
-        next_state, reward, done, length = env.step(action)
+            env.render()
 
-        state = np.reshape(next_state, [-1])
-        time.sleep(0.1)
+            action = agent.action(state)
+            next_state, reward, done, length = env.step(action)
 
-        if done:
-            break
+            max_length = max(max_length, length)
 
+            state = np.reshape(next_state, [-1])
+            time.sleep(0.1)
+
+            if done:
+                break
+
+        print "max_length: ", max_length
 
 
 if __name__ == '__main__':
