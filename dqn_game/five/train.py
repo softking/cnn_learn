@@ -24,7 +24,7 @@ class DQN():
         # init some parameters
         self.time_step = 0
         self.epsilon = INITIAL_EPSILON
-        self.SIZE = env.env.SIZE
+        self.SIZE = env.SIZE
         self.state_dim = self.SIZE * self.SIZE + 1
         self.action_dim = self.SIZE * self.SIZE
         self.hide_layer_inputs = 52
@@ -172,6 +172,14 @@ class DQN():
 
 
 # ---------------------------------------------------------
+from gym.envs.registration import register
+
+register(
+    id='FiveChess-v0',
+    entry_point='five:FiveChess',  # 第一个myenv是文件夹名字，第二个myenv是文件名字，MyEnv是文件内类的名字
+)
+
+
 # Hyper Parameters
 ENV_NAME = 'FiveChess-v0'
 EPISODE = 10000  # Episode limitation
@@ -183,7 +191,7 @@ def main():
     # initialize OpenAI Gym env and dqn agent
     env = gym.make(ENV_NAME)
     agent = DQN(env)
-    SIZE = env.env.SIZE
+    SIZE = env.SIZE
 
     agent.copyWeightsToTarget()
 
