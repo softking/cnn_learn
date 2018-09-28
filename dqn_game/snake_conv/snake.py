@@ -12,7 +12,7 @@ from pygame.locals import *
 redColour = pygame.Color(255,0,0)
 blackColour = pygame.Color(0,0,0)
 whiteColour = pygame.Color(255,255,255)
-greyColour = pygame.Color(150,150,150)
+greenColour = pygame.Color(0,255,0)
 
 class Snake(gym.Env):
     """
@@ -119,9 +119,12 @@ class Snake(gym.Env):
     def render(self, mode='human', close=False):
         # 绘制pygame显示层
         self.playSurface.fill(blackColour)
-        for position in self.snakeSegments:
+
+        pygame.draw.rect(self.playSurface, greenColour, Rect(self.snakePosition[0], self.snakePosition[1], 20, 20))
+        for position in self.snakeSegments[1:]:
             pygame.draw.rect(self.playSurface, whiteColour, Rect(position[0], position[1], 20, 20))
-            pygame.draw.rect(self.playSurface, redColour, Rect(self.raspberryPosition[0], self.raspberryPosition[1], 20, 20))
+
+        pygame.draw.rect(self.playSurface, redColour, Rect(self.raspberryPosition[0], self.raspberryPosition[1], 20, 20))
 
         # 刷新pygame显示层
         pygame.display.flip()

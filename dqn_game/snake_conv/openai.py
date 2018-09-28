@@ -5,8 +5,6 @@ import numpy as np
 import random
 from collections import deque
 import gym
-import time
-import math
 
 GAMMA = 0.9  # discount factor for target Q
 INITIAL_EPSILON = 0.1  # starting value of epsilon
@@ -138,12 +136,10 @@ class DQN():
         })
 
 
-    def egreedy_action(self, state):
-        Q_value = self.Q_value.eval(feed_dict={self.state_input: [state]})[0]
-
+    def egreedy_action(self, state, length):
         self.epsilon = max(self.epsilon - 0.000004, FINAL_EPSILON)
 
-        if random.random() <= self.epsilon:
+        if random.random() <= self.epsilon and length > 4:
             head = [0, 0]
             food = [0, 0]
             for i in range(len(state)):
@@ -166,6 +162,7 @@ class DQN():
 
             return np.random.randint(0, 4)
         else:
+            Q_value = self.Q_value.eval(feed_dict={self.state_input: [state]})[0]
             return np.argmax(Q_value)
 
     def action(self, state):
@@ -204,9 +201,8 @@ def main():
 
             env.render()
 
-            action = agent.egreedy_action(state)
+            action = agent.egreedy_action(state, max_length)
             next_state, reward, done, length = env.step(action)
-
             agent.perceive(state, action, reward, next_state, done)
             state = next_state
             reward_sum += reward
