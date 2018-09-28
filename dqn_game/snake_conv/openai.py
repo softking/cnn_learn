@@ -10,7 +10,7 @@ GAMMA = 0.9  # discount factor for target Q
 INITIAL_EPSILON = 0.1  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
 REPLAY_SIZE = 10000  # 经验回放缓存大小
-BATCH_SIZE = 600  # 小批量尺寸
+BATCH_SIZE = 100  # 小批量尺寸
 
 
 def weight_variable(shape):
@@ -139,7 +139,7 @@ class DQN():
     def egreedy_action(self, state, length):
         self.epsilon = max(self.epsilon - 0.000004, FINAL_EPSILON)
 
-        if random.random() <= self.epsilon and length > 4:
+        if random.random() <= self.epsilon and length >= 0:
             head = [0, 0]
             food = [0, 0]
             for i in range(len(state)):
