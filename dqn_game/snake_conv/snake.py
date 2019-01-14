@@ -26,7 +26,9 @@ class Snake(gym.Env):
 
         self.snakePosition = [100, 100]
         self.snakeSegments = [[100, 100], [80, 100], [60, 100]]
-        self.raspberryPosition = [80, 80]
+        x = random.randrange(3, 10)
+        y = random.randrange(3, 10)
+        self.raspberryPosition = [int(x * 20), int(y * 20)]
         self.direction = 0
 
         pygame.init()
@@ -36,10 +38,10 @@ class Snake(gym.Env):
         """
         """
         data = np.full((16, 12, 1), 0)
-        data[self.snakePosition[0]/20-1][self.snakePosition[1]/20-1][0] += 1     # 头
-        data[self.raspberryPosition[0] / 20 - 1][self.raspberryPosition[1] / 20 - 1][0] += 4  # 草莓
+        data[int(self.snakePosition[0]/20-1)][int(self.snakePosition[1]/20-1)][0] += 1     # 头
+        data[int(self.raspberryPosition[0] / 20 - 1)][int(self.raspberryPosition[1] / 20 - 1)][0] += 4  # 草莓
         for i in self.snakeSegments[1:]:
-            data[i[0] / 20 - 1][i[1] / 20 - 1][0] += 2  # 身子
+            data[int(i[0] / 20 - 1)][int(i[1] / 20 - 1)][0] += 2  # 身子
         return data
 
         # image_data = pygame.surfarray.array3d(pygame.display.get_surface())
@@ -51,7 +53,7 @@ class Snake(gym.Env):
         # 检测例如按键等pygame事件
         pygame.event.get()
 
-        reward = 0
+        reward = 1
         done = False
 
         self.direction = action
@@ -76,30 +78,32 @@ class Snake(gym.Env):
             self.snakeSegments.pop()
 
         self.step_num += 1
-        reward -= self.step_num * 0.2
+
+        # reward -= self.step_num * 0.2
+
         # 如果吃掉树莓，则重新生成树莓
         if raspberrySpawned == 0:
             x = random.randrange(3, 10)
             y = random.randrange(3, 10)
             self.raspberryPosition = [int(x * 20), int(y * 20)]
 
-            reward += 1000
+            reward = 100
 
         # 判断是否死亡
         if self.snakePosition[0] > 300 or self.snakePosition[0] < 0:
             self.reset()
-            reward = -10
+            reward = -100
             done = True
 
         if self.snakePosition[1] > 220 or self.snakePosition[1] < 0:
             self.reset()
-            reward = -10
+            reward = -100
             done = True
 
         for snakeBody in self.snakeSegments[1:]:
             if self.snakePosition[0] == snakeBody[0] and self.snakePosition[1] == snakeBody[1]:
                 self.reset()
-                reward = -10
+                reward = -100
                 done = True
 
         # 控制游戏速度
@@ -110,7 +114,9 @@ class Snake(gym.Env):
     def reset(self):
         self.snakePosition = [100, 100]
         self.snakeSegments = [[100, 100], [80, 100], [60, 100]]
-        self.raspberryPosition = [80, 80]
+        x = random.randrange(3, 10)
+        y = random.randrange(3, 10)
+        self.raspberryPosition = [int(x * 20), int(y * 20)]
         self.direction = 0
         self.step_num = 0
         return self.build_data()

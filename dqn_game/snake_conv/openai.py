@@ -7,10 +7,10 @@ from collections import deque
 import gym
 
 GAMMA = 0.9  # discount factor for target Q
-INITIAL_EPSILON = 0.1  # starting value of epsilon
+INITIAL_EPSILON = 0.5  # starting value of epsilon
 FINAL_EPSILON = 0.001  # final value of epsilon
 REPLAY_SIZE = 10000  # 经验回放缓存大小
-BATCH_SIZE = 100  # 小批量尺寸
+BATCH_SIZE = 200  # 小批量尺寸
 
 
 def weight_variable(shape):
@@ -213,7 +213,7 @@ def main():
                 # env.reset()
                 break
 
-        print 'step: ', step, "   reward_num: ", reward_sum, "  max_length", max_length, "  epsilon:", agent.epsilon
+        print('step: ', step, "   reward_num: ", reward_sum, "  max_length", max_length, "  epsilon:", agent.epsilon)
         if step % 100 == 0:
             agent.save_models(step)
 

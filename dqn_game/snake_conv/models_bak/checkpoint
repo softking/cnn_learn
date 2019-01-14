@@ -1,0 +1,4 @@
+model_checkpoint_path: "snake-300"
+all_model_checkpoint_paths: "snake-100"
+all_model_checkpoint_paths: "snake-200"
+all_model_checkpoint_paths: "snake-300"
