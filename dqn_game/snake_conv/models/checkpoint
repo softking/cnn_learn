@@ -1,2 +1,6 @@
-model_checkpoint_path: "snake-100"
-all_model_checkpoint_paths: "snake-100"
+model_checkpoint_path: "snake-4800"
+all_model_checkpoint_paths: "snake-4400"
+all_model_checkpoint_paths: "snake-4500"
+all_model_checkpoint_paths: "snake-4600"
+all_model_checkpoint_paths: "snake-4700"
+all_model_checkpoint_paths: "snake-4800"

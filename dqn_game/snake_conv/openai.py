@@ -182,6 +182,7 @@ register(
 def main():
     # initialize OpenAI Gym env and dqn agent
     env = gym.make('Snake-v0')
+    env.set_show()
     agent = DQN(env)
 
     step = 0

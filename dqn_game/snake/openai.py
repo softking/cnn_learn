@@ -183,7 +183,7 @@ def main():
                 # env.reset()
                 break
 
-        print 'step: ', step, "   reward_num: ", reward_sum, "  max_length", max_length, "  epsilon:", agent.epsilon
+        print('step: ', step, "   reward_num: ", reward_sum, "  max_length", max_length, "  epsilon:", agent.epsilon)
         if step % 100 == 0:
             agent.save_models(step)
 

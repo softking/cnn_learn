@@ -55,6 +55,6 @@ def get_face(outdir):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    name = raw_input('please input yourename: ')
+    name = input('please input yourename: ')
     get_face(os.path.join('./images', name))
 

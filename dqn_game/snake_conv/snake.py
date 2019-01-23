@@ -18,10 +18,9 @@ class Snake(gym.Env):
     """
     """
     def __init__(self):
-        self.viewer = None
         self.fpsClock = pygame.time.Clock()
-        # 创建pygame显示层
-        self.playSurface = pygame.display.set_mode((320, 240))
+        self.is_show = False
+        
         self.step_num = 0
 
         self.snakePosition = [100, 100]
@@ -31,8 +30,16 @@ class Snake(gym.Env):
         self.raspberryPosition = [int(x * 20), int(y * 20)]
         self.direction = 0
 
+
+    def set_show(self, is_show=True):
+        self.is_show = is_show
+
+        if not is_show: return
+        
+        self.playSurface = pygame.display.set_mode((320, 240))
         pygame.init()
         pygame.display.set_caption('Raspberry Snake')
+
 
     def build_data(self):
         """
@@ -51,7 +58,7 @@ class Snake(gym.Env):
         """
         """
         # 检测例如按键等pygame事件
-        pygame.event.get()
+        if self.is_show: pygame.event.get()
 
         reward = 1
         done = False
