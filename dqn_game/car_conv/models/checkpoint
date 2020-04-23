@@ -1,0 +1,6 @@
+model_checkpoint_path: "snake-600"
+all_model_checkpoint_paths: "snake-520"
+all_model_checkpoint_paths: "snake-540"
+all_model_checkpoint_paths: "snake-560"
+all_model_checkpoint_paths: "snake-580"
+all_model_checkpoint_paths: "snake-600"

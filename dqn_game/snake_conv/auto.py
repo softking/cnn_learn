@@ -128,7 +128,8 @@ def main():
                 # env.reset()
                 break
 
-        print 'step: ', step, "   reward_num: ", reward_sum, "  max_length", max_length
+        print('step: ', step, "   reward_num: ", reward_sum, "  max_length", max_length)
+
 
 
 if __name__ == '__main__':
