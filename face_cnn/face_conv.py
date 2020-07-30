@@ -34,15 +34,15 @@ def dropout(x, keep):
 
 def cnnLayer(classnum):
     # 第一层
-    W1 = weightVariable([3, 3, 3, 32]) # 卷积核大小(3,3)， 输入通道(3)， 输出通道(32)
-    b1 = biasVariable([32])
+    W1 = weightVariable([3, 3, 3, 64]) # 卷积核大小(3,3)， 输入通道(3)， 输出通道(32)
+    b1 = biasVariable([64])
     conv1 = tf.nn.relu(conv2d(x_data, W1) + b1)
     pool1 = maxPool(conv1)
     # 减少过拟合，随机让某些权重不更新
     drop1 = dropout(pool1, keep_prob_5) # 32 * 32 * 32 多个输入channel 被filter内积掉了
 
     # 第二层
-    W2 = weightVariable([3, 3, 32, 64])
+    W2 = weightVariable([3, 3, 64, 64])
     b2 = biasVariable([64])
     conv2 = tf.nn.relu(conv2d(drop1, W2) + b2)
     pool2 = maxPool(conv2)
@@ -86,9 +86,9 @@ def train(train_x, train_y, model_path):
         if os.path.exists(model_path + '.meta'):
             saver.restore(sess, model_path)
 
-        batch_size = 10
-        num_batch = len(train_x) // 10
-        for n in range(10):
+        batch_size = 50
+        num_batch = len(train_x) // 50
+        for n in range(50):
             r = np.random.permutation(len(train_x))
             train_x = train_x[r, :]
             train_y = train_y[r, :]
