@@ -9,31 +9,23 @@ import wrapped_flappy_bird as game
 import random
 import numpy as np
 from collections import deque
+tf.compat.v1.disable_eager_execution()
 
 GAME = 'bird' # the name of the game being played for log files
-# ACTIONS = 2 # number of valid actions
-# GAMMA = 0.99 # decay rate of past observations
-# OBSERVE = 100000. # timesteps to observe before training
-# EXPLORE = 2000000. # frames over which to anneal epsilon
-# FINAL_EPSILON = 0.0001 # final value of epsilon
-# INITIAL_EPSILON = 0.0001 # starting value of epsilon
-# REPLAY_MEMORY = 50000 # number of previous transitions to remember
-# BATCH = 32 # size of minibatch
-# FRAME_PER_ACTION = 1
 
 ACTIONS = 2 # number of valid actions
 GAMMA = 0.99 # decay rate of past observations
 OBSERVE = 1000. # timesteps to observe before training
 EXPLORE = 2000000. # frames over which to anneal epsilon
 FINAL_EPSILON = 0.0001 # final value of epsilon
-INITIAL_EPSILON = 0.0001 # starting value of epsilon
+INITIAL_EPSILON = 0.1 # starting value of epsilon
 REPLAY_MEMORY = 50000 # number of previous transitions to remember
-BATCH = 32 # size of minibatch
+BATCH = 64 # size of minibatch
 FRAME_PER_ACTION = 1
 
 
 def weight_variable(shape):
-    initial = tf.truncated_normal(shape, stddev = 0.01)
+    initial = tf.compat.v1.random.truncated_normal(shape, stddev = 0.01)
     return tf.Variable(initial)
 
 def bias_variable(shape):
@@ -64,7 +56,7 @@ def createNetwork():
     b_fc2 = bias_variable([ACTIONS])
 
     # input layer
-    s = tf.placeholder("float", [None, 80, 80, 4])
+    s = tf.compat.v1.placeholder("float", [None, 80, 80, 4])
 
     # hidden layers
     h_conv1 = tf.nn.relu(conv2d(s, W_conv1, 4) + b_conv1)
@@ -88,11 +80,17 @@ def createNetwork():
 
 def trainNetwork(s, readout, h_fc1, sess):
     # define the cost function
-    a = tf.placeholder("float", [None, ACTIONS])
-    y = tf.placeholder("float", [None])
-    readout_action = tf.reduce_sum(tf.multiply(readout, a), reduction_indices=1)
+    a = tf.compat.v1.placeholder("float", [None, ACTIONS])
+    y = tf.compat.v1.placeholder("float", [None])
+    readout_action = tf.reduce_sum(tf.multiply(readout, a))
     cost = tf.reduce_mean(tf.square(y - readout_action))
-    train_step = tf.train.AdamOptimizer(1e-6).minimize(cost)
+
+
+    # train_step = tf.keras.optimizers.legacy.Adam(1e-6).minimize(cost)
+
+    train_step = tf.compat.v1.train.AdamOptimizer(1e-6).minimize(cost)
+
+
 
     # open up a game state to communicate with emulator
     game_state = game.GameState()
@@ -109,21 +107,23 @@ def trainNetwork(s, readout, h_fc1, sess):
     s_t = np.stack((x_t, x_t, x_t, x_t), axis=2)
 
     # saving and loading networks
-    saver = tf.train.Saver()
-    sess.run(tf.initialize_all_variables())
+    saver = tf.compat.v1.train.Saver()
+    sess.run(tf.compat.v1.global_variables_initializer())
     checkpoint = tf.train.get_checkpoint_state("saved_networks")
     if checkpoint and checkpoint.model_checkpoint_path:
         saver.restore(sess, checkpoint.model_checkpoint_path)
         print("Successfully loaded:", checkpoint.model_checkpoint_path)
+        t = int(checkpoint.model_checkpoint_path.split("-")[-1])
     else:
         print("Could not find old network weights")
-
+        t = 0
+        
+    init = 0
     # start training
     epsilon = INITIAL_EPSILON
-    t = 0
-    while "flappy bird" != "angry bird":
+    while True:
         # choose an action epsilon greedily
-        readout_t = readout.eval(feed_dict={s : [s_t]})[0]
+        readout_t = readout.eval(session=sess, feed_dict={s : [s_t]})[0]
         a_t = np.zeros([ACTIONS])
         action_index = 0
         if t % FRAME_PER_ACTION == 0:
@@ -138,7 +138,7 @@ def trainNetwork(s, readout, h_fc1, sess):
 
         # scale down epsilon
         if epsilon > FINAL_EPSILON and t > OBSERVE:
-            epsilon -= (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE
+            epsilon = INITIAL_EPSILON - (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE * t
 
         # run the selected action and observe next state and reward
         x_t1_colored, r_t, terminal = game_state.frame_step(a_t)
@@ -157,7 +157,7 @@ def trainNetwork(s, readout, h_fc1, sess):
             D.popleft()
 
         # only train if done observing
-        if t > OBSERVE:
+        if init > OBSERVE:
             # sample a minibatch to train on
             minibatch = random.sample(D, BATCH)
 
@@ -171,7 +171,7 @@ def trainNetwork(s, readout, h_fc1, sess):
             s_j1_batch = [d[3] for d in minibatch]
 
             y_batch = []
-            readout_j1_batch = readout.eval(feed_dict = {s : s_j1_batch})
+            readout_j1_batch = readout.eval(session=sess, feed_dict = {s : s_j1_batch})
             for i in range(0, len(minibatch)):
                 terminal = minibatch[i][4]
                 # if terminal, only equals reward
@@ -181,7 +181,7 @@ def trainNetwork(s, readout, h_fc1, sess):
                     y_batch.append(r_batch[i] + GAMMA * np.max(readout_j1_batch[i]))
 
             # perform gradient step
-            train_step.run(feed_dict = {
+            train_step.run(session=sess, feed_dict = {
                 y : y_batch,
                 a : a_batch,
                 s : s_j_batch}
@@ -190,6 +190,7 @@ def trainNetwork(s, readout, h_fc1, sess):
         # update the old values
         s_t = s_t1
         t += 1
+        init += 1
 
         # save progress every 10000 iterations
         if t % 5000 == 0:
@@ -210,7 +211,7 @@ def trainNetwork(s, readout, h_fc1, sess):
 
 
 def playGame():
-    sess = tf.InteractiveSession()
+    sess = sess = tf.compat.v1.Session()
     s, readout, h_fc1 = createNetwork()
     trainNetwork(s, readout, h_fc1, sess)
 
