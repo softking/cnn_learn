@@ -9,12 +9,13 @@ import wrapped_flappy_bird as game
 import random
 import numpy as np
 from collections import deque
+tf.compat.v1.disable_eager_execution()
 
 
 ACTIONS = 2 # number of valid actions
 
 def weight_variable(shape):
-    initial = tf.truncated_normal(shape, stddev = 0.01)
+    initial = tf.compat.v1.random.truncated_normal(shape, stddev = 0.01)
     return tf.Variable(initial)
 
 def bias_variable(shape):
@@ -44,8 +45,9 @@ def createNetwork():
     W_fc2 = weight_variable([512, ACTIONS])
     b_fc2 = bias_variable([ACTIONS])
 
+    
     # input layer
-    s = tf.placeholder("float", [None, 80, 80, 4])
+    s = tf.compat.v1.placeholder("float", [None, 80, 80, 4])
 
     # hidden layers
     h_conv1 = tf.nn.relu(conv2d(s, W_conv1, 4) + b_conv1)
@@ -80,7 +82,7 @@ def run_network(s, readout, h_fc1, sess):
 
     while True:
         # choose an action epsilon greedily
-        readout_t = readout.eval(feed_dict={s : [s_t]})[0]
+        readout_t = readout.eval(session=sess, feed_dict={s : [s_t]})[0]
         a_t = np.zeros([ACTIONS])
         
         action_index = np.argmax(readout_t)
@@ -96,12 +98,12 @@ def run_network(s, readout, h_fc1, sess):
        
 
 def main():
-    sess = tf.InteractiveSession()
+    sess = tf.compat.v1.Session()
     s, readout, h_fc1 = createNetwork()
 
-    saver = tf.train.Saver()
-    sess.run(tf.initialize_all_variables())
-    checkpoint = tf.train.get_checkpoint_state("saved_networks")
+    saver = tf.compat.v1.train.Saver()
+    sess.run(tf.compat.v1.global_variables_initializer())
+    checkpoint = tf.compat.v1.train.get_checkpoint_state("saved_networks")
     if checkpoint and checkpoint.model_checkpoint_path:
         saver.restore(sess, checkpoint.model_checkpoint_path)
         print("Successfully loaded:", checkpoint.model_checkpoint_path)
