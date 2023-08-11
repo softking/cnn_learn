@@ -32,12 +32,11 @@ class DQN():
         self.create_training_method()
 
         # 初始会话
-        self.session = tf.InteractiveSession()
-        self.session.run(tf.initialize_all_variables())
+        self.session = tf.compat.v1.Session()
 
         # saving and loading networks
-        self.saver = tf.train.Saver()
-        self.session.run(tf.initialize_all_variables())
+        self.saver = tf.compat.v1.train.Saver()
+        self.session.run(tf.compat.v1.initialize_all_variables())
         checkpoint = tf.train.get_checkpoint_state("models")
         if checkpoint and checkpoint.model_checkpoint_path:
             self.saver.restore(self.session, checkpoint.model_checkpoint_path)
@@ -142,14 +141,14 @@ class DQN():
 from gym.envs.registration import register
 
 register(
-    id='Snake-v0',
+    id='snake',
     entry_point='snake:Snake',  # 第一个myenv是文件夹名字，第二个myenv是文件名字，MyEnv是文件内类的名字
 )
 
 
 def main():
     # initialize OpenAI Gym env and dqn agent
-    env = gym.make('Snake-v0')
+    env = gym.make('snake')
     agent = DQN(env)
 
     step = 0
